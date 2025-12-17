@@ -1,4 +1,3 @@
-# Simple workflow for deploying a Vite React app to GitHub Pages
 name: Deploy Vite App
 
 on:
@@ -16,7 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # JOB 1: BUILD THE CODE
   build:
     runs-on: ubuntu-latest
     steps:
@@ -38,10 +36,8 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # VITAL CHANGE: We upload the 'dist' folder, not the root '.'
           path: ./dist
 
-  # JOB 2: DEPLOY THE BUILT CODE
   deploy:
     environment:
       name: github-pages
