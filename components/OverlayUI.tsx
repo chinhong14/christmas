@@ -49,14 +49,13 @@ const OverlayUI: React.FC<OverlayUIProps> = ({ appState, onJoin, onSubmitName, o
   };
 
   return (
-    <div className="absolute inset-0 pointer-events-none flex flex-col justify-center items-center z-10 p-4">
+    <div className="absolute inset-0 pointer-events-none flex flex-col justify-center items-center z-10 p-0 md:p-4">
       {/* Background Gradient Vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.8)_100%)]"></div>
 
       {/* SEQUENCE OVERLAY (CAPTION ONLY) */}
       {appState === 'SEQUENCE' && currentSlideIndex !== -1 && (
         <div key={currentSlideIndex} className="absolute bottom-16 md:bottom-24 z-50 flex flex-col items-center justify-center w-full px-6 animate-fade-in-up">
-             {/* Removed background container, added strong text shadow for legibility */}
              <p className="text-gold-300 font-serif text-xl md:text-3xl text-center italic tracking-wider drop-shadow-[0_2px_8px_rgba(0,0,0,1)] text-shadow-lg max-w-4xl leading-relaxed">
                 "{MEMORY_LANE[currentSlideIndex].text}"
              </p>
@@ -65,14 +64,14 @@ const OverlayUI: React.FC<OverlayUIProps> = ({ appState, onJoin, onSubmitName, o
 
       {/* Main Container - Adjusted width for different states */}
       <div className={`relative z-20 w-full text-center pointer-events-auto transition-all duration-500 
-        ${appState === 'TICKET' ? 'max-w-5xl h-full flex flex-col justify-center' : ''}
+        ${appState === 'TICKET' ? 'max-w-6xl h-full flex flex-col' : ''}
         ${appState === 'ITINERARY' ? 'max-w-xl' : ''}
         ${appState === 'GIFT_EXCHANGE' ? 'max-w-xl' : 'max-w-2xl'}
       `}>
         
         {/* INITIAL STATE: Titles and Button */}
         {appState === 'SCATTERED' && (
-          <div className="flex flex-col items-center gap-8 animate-fade-in">
+          <div className="flex flex-col items-center gap-8 animate-fade-in px-4">
             <div className="space-y-2">
               <h2 className="font-serif text-gold-400 text-xl md:text-2xl tracking-[0.3em] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                 Kundasang Gang
@@ -101,9 +100,9 @@ const OverlayUI: React.FC<OverlayUIProps> = ({ appState, onJoin, onSubmitName, o
 
         {/* REGISTER STATE: Final message after formation */}
         {appState === 'REGISTER' && (
-             <div className="flex flex-col items-center gap-4 animate-fade-in-up max-w-4xl px-4 text-center mt-20">
+             <div className="flex flex-col items-center gap-4 animate-fade-in-up max-w-4xl px-6 text-center mt-20">
                 
-                <p className="font-serif text-gold-500 text-xs md:text-sm tracking-[0.4em] uppercase font-bold mb-2 z-10">
+                <p className="font-serif text-gold-500 text-[10px] md:text-sm tracking-[0.4em] uppercase font-bold mb-2 z-10">
                     Welcome to
                 </p>
 
@@ -111,7 +110,7 @@ const OverlayUI: React.FC<OverlayUIProps> = ({ appState, onJoin, onSubmitName, o
                     Kundasang Gang
                 </h2>
 
-                <h1 className="font-script text-6xl md:text-8xl text-gold-400 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] -mt-4 py-4 leading-normal z-20">
+                <h1 className="font-script text-5xl md:text-8xl text-gold-400 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] -mt-4 py-4 leading-normal z-20">
                     Christmas Party
                 </h1>
 
@@ -132,7 +131,7 @@ const OverlayUI: React.FC<OverlayUIProps> = ({ appState, onJoin, onSubmitName, o
 
         {/* INPUT STATE: Name Entry */}
         {appState === 'INPUT' && (
-          <div className="animate-fade-in-up backdrop-blur-sm bg-slate-900/60 p-8 rounded-2xl border border-white/10 shadow-2xl mx-auto max-w-lg">
+          <div className="animate-fade-in-up backdrop-blur-sm bg-slate-900/60 p-8 rounded-2xl border border-white/10 shadow-2xl mx-auto max-w-lg mx-4">
             <h2 className="font-serif text-white text-2xl mb-6 tracking-wide">Enter Your Name</h2>
             <form onSubmit={handleNameSubmit} className="flex flex-col gap-4">
               <input 
@@ -165,9 +164,8 @@ const OverlayUI: React.FC<OverlayUIProps> = ({ appState, onJoin, onSubmitName, o
 
         {/* ITINERARY STATE */}
         {appState === 'ITINERARY' && (
-          <div className="animate-fade-in-up backdrop-blur-md bg-slate-950/80 p-6 md:p-8 rounded-2xl border border-gold-500/30 shadow-[0_0_50px_rgba(0,0,0,0.8)] mx-auto w-full text-left relative overflow-hidden max-h-[85vh] overflow-y-auto no-scrollbar">
-             {/* Decorative glow */}
-             <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+          <div className="animate-fade-in-up backdrop-blur-md bg-slate-950/80 p-6 md:p-8 rounded-2xl border border-gold-500/30 shadow-[0_0_50px_rgba(0,0,0,0.8)] mx-4 md:mx-auto w-auto md:w-full text-left relative overflow-hidden max-h-[85vh] overflow-y-auto no-scrollbar">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
             <div className="relative z-10 flex flex-col h-full">
                 <div className="text-center mb-6">
@@ -207,72 +205,54 @@ const OverlayUI: React.FC<OverlayUIProps> = ({ appState, onJoin, onSubmitName, o
           </div>
         )}
 
-        {/* GIFT EXCHANGE STATE - REDESIGNED & PREMIUM */}
+        {/* GIFT EXCHANGE STATE */}
         {appState === 'GIFT_EXCHANGE' && (
-             <div className="animate-fade-in-up backdrop-blur-xl bg-slate-950/70 p-8 md:p-10 rounded-3xl border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)] mx-auto w-full max-w-lg text-center relative overflow-hidden">
-                
-                {/* Premium Golden Glow */}
+             <div className="animate-fade-in-up backdrop-blur-xl bg-slate-950/70 p-6 md:p-10 rounded-3xl border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)] mx-4 md:mx-auto w-auto md:w-full max-w-lg text-center relative overflow-hidden">
                 <div className="absolute -top-20 -left-20 w-64 h-64 bg-gold-500/10 rounded-full blur-[80px] pointer-events-none"></div>
                 <div className="absolute bottom-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-[60px] pointer-events-none"></div>
 
                 <div className="relative z-10 flex flex-col h-full items-center">
-                    <div className="text-center mb-8">
+                    <div className="text-center mb-6 md:mb-8">
                         <h2 className="font-serif text-gold-500 text-[10px] tracking-[0.4em] uppercase font-bold mb-2">Secret Santa</h2>
-                        <h1 className="font-serif text-4xl text-white tracking-widest uppercase drop-shadow-xl border-b pb-4 border-white/10">
+                        <h1 className="font-serif text-3xl md:text-4xl text-white tracking-widest uppercase drop-shadow-xl border-b pb-4 border-white/10">
                             The Rules
                         </h1>
                     </div>
 
-                    <div className="w-full space-y-4 mb-8">
-                        {/* Budget Card */}
-                        <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/50 p-5 rounded-xl border border-white/10 hover:border-gold-500/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(234,179,8,0.1)] flex items-center gap-4">
-                            <div className="h-10 w-10 min-w-[2.5rem] rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-slate-900 transition-colors duration-300">
+                    <div className="w-full space-y-3 md:y-4 mb-6 md:mb-8">
+                        <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/50 p-4 md:p-5 rounded-xl border border-white/10 hover:border-gold-500/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(234,179,8,0.1)] flex items-center gap-4">
+                            <div className="h-9 w-9 md:h-10 md:w-10 min-w-[2.25rem] rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-slate-900 transition-colors duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
                             <div className="text-left">
-                                <h3 className="text-slate-400 font-serif text-[10px] tracking-widest uppercase mb-0.5">Gift Value</h3>
-                                <p className="text-white font-medium text-sm md:text-base">Around <span className="text-gold-400 font-bold">RM30 - RM40</span></p>
+                                <h3 className="text-slate-400 font-serif text-[9px] md:text-[10px] tracking-widest uppercase mb-0.5">Gift Value</h3>
+                                <p className="text-white font-medium text-xs md:text-base">Around <span className="text-gold-400 font-bold">RM30 - RM40</span></p>
                             </div>
                         </div>
 
-                        {/* NEW: The Tease (Describe Gift First) */}
-                         <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/50 p-5 rounded-xl border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.1)] flex items-center gap-4">
-                            <div className="h-10 w-10 min-w-[2.5rem] rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
+                         <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/50 p-4 md:p-5 rounded-xl border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.1)] flex items-center gap-4">
+                            <div className="h-9 w-9 md:h-10 md:w-10 min-w-[2.25rem] rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
                             </div>
                             <div className="text-left">
-                                <h3 className="text-slate-400 font-serif text-[10px] tracking-widest uppercase mb-0.5">The Tease</h3>
-                                <p className="text-white font-medium text-sm md:text-base leading-tight">Describe your gift to the group. <span className="italic text-purple-200">Let them guess!</span></p>
+                                <h3 className="text-slate-400 font-serif text-[9px] md:text-[10px] tracking-widest uppercase mb-0.5">The Tease</h3>
+                                <p className="text-white font-medium text-xs md:text-base leading-tight">Describe your gift to the group. <span className="italic text-purple-200">Let them guess!</span></p>
                             </div>
                         </div>
 
-                        {/* Process Card */}
-                        <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/50 p-5 rounded-xl border border-white/10 hover:border-emerald-500/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(16,185,129,0.1)] flex items-center gap-4">
-                            <div className="h-10 w-10 min-w-[2.5rem] rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                        <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/50 p-4 md:p-5 rounded-xl border border-white/10 hover:border-emerald-500/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(16,185,129,0.1)] flex items-center gap-4">
+                            <div className="h-9 w-9 md:h-10 md:w-10 min-w-[2.25rem] rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                 </svg>
                             </div>
                             <div className="text-left">
-                                <h3 className="text-slate-400 font-serif text-[10px] tracking-widest uppercase mb-0.5">The Exchange</h3>
-                                <p className="text-white font-medium text-sm md:text-base">Draw a number. Reveal your gift.</p>
-                            </div>
-                        </div>
-
-                        {/* Rule Card */}
-                        <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/50 p-5 rounded-xl border border-white/10 hover:border-red-500/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.1)] flex items-center gap-4">
-                             <div className="h-10 w-10 min-w-[2.5rem] rounded-full bg-red-500/10 flex items-center justify-center text-red-400 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                            </div>
-                            <div className="text-left">
-                                <h3 className="text-slate-400 font-serif text-[10px] tracking-widest uppercase mb-0.5">Golden Rule</h3>
-                                <p className="text-white font-medium text-sm md:text-base">If you draw your own name, <span className="italic text-white/80">put it back.</span></p>
+                                <h3 className="text-slate-400 font-serif text-[9px] md:text-[10px] tracking-widest uppercase mb-0.5">The Exchange</h3>
+                                <p className="text-white font-medium text-xs md:text-base">Draw a number. Reveal your gift.</p>
                             </div>
                         </div>
                     </div>
@@ -297,13 +277,13 @@ const OverlayUI: React.FC<OverlayUIProps> = ({ appState, onJoin, onSubmitName, o
 
         {/* TICKET STATE: Final Result */}
         {appState === 'TICKET' && (
-          <div className="flex justify-center w-full h-full items-center overflow-y-auto no-scrollbar py-8">
+          <div className="flex justify-center w-full h-full items-start md:items-center overflow-y-auto no-scrollbar py-12 md:py-8">
             <Ticket name={userName} />
           </div>
         )}
       </div>
 
-      {/* Footer Branding - Always visible unless Ticket */}
+      {/* Footer Branding */}
       {appState !== 'TICKET' && appState !== 'ITINERARY' && appState !== 'SEQUENCE' && appState !== 'GIFT_EXCHANGE' && (
         <div className="absolute bottom-8 text-slate-500 font-serif text-xs tracking-[0.2em] opacity-60">
           DECEMBER 24 • 2025

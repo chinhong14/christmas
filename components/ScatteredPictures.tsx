@@ -16,12 +16,17 @@ interface ImageErrorBoundaryState {
 }
 
 // Robust Error Boundary to catch texture loading errors without crashing the app
-class ImageErrorBoundary extends Component<ImageErrorBoundaryProps, ImageErrorBoundaryState> {
-  state: ImageErrorBoundaryState = { hasError: false };
+// Fix: Use React.Component explicitly and add constructor to ensure 'props' is recognized by the compiler
+class ImageErrorBoundary extends React.Component<ImageErrorBoundaryProps, ImageErrorBoundaryState> {
+  constructor(props: ImageErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError() { return { hasError: true }; }
   
   render() {
+    // Accessing this.state and this.props which are now properly inherited from React.Component
     if (this.state.hasError) {
       return this.props.fallback || (
         <mesh>
