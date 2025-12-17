@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
-      // 1. THIS IS THE NEW LINE YOU NEED
-      base: "/christmas/",
+      // THIS IS THE IMPORTANT FIX:
+      base: "/christmas/", 
       
       server: {
         port: 3000,
