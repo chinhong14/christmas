@@ -1,4 +1,5 @@
-export type AppState = 'SCATTERED' | 'FORMING' | 'INPUT' | 'TICKET';
+
+export type AppState = 'SCATTERED' | 'SEQUENCE' | 'FORMING' | 'REGISTER' | 'INPUT' | 'ITINERARY' | 'GIFT_EXCHANGE' | 'TICKET';
 
 export interface ParticleData {
   id: number;

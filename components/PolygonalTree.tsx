@@ -1,36 +1,9 @@
+
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { PARTICLE_COUNT, TREE_HEIGHT, TREE_RADIUS, SCATTER_RADIUS, PALETTE } from '../constants';
 import { AppState } from '../types';
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      group: any;
-      instancedMesh: any;
-      dodecahedronGeometry: any;
-      meshStandardMaterial: any;
-      mesh: any;
-      octahedronGeometry: any;
-      pointLight: any;
-    }
-  }
-}
-
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      group: any;
-      instancedMesh: any;
-      dodecahedronGeometry: any;
-      meshStandardMaterial: any;
-      mesh: any;
-      octahedronGeometry: any;
-      pointLight: any;
-    }
-  }
-}
 
 interface PolygonalTreeProps {
   appState: AppState;
@@ -101,25 +74,43 @@ const PolygonalTree: React.FC<PolygonalTreeProps> = ({ appState, onTreeFormed })
   useEffect(() => {
     // Set initial colors
     if (meshRef.current) {
+      // Explicitly create instanceColor attribute if it doesn't exist.
+      // R3F/Three sometimes requires this manual step for InstancedMesh if material doesn't trigger it.
+      if (!meshRef.current.instanceColor) {
+         meshRef.current.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(PARTICLE_COUNT * 3), 3);
+      }
+
       particles.forEach((p, i) => {
-        meshRef.current!.setColorAt(i, p.color);
+        // Safe check before calling methods on the ref
+        if (meshRef.current) {
+            meshRef.current.setColorAt(i, p.color);
+            // Initialize matrix to avoid zero-scale issues at start
+            dummy.position.copy(p.scatterPos);
+            dummy.updateMatrix();
+            meshRef.current.setMatrixAt(i, dummy.matrix);
+        }
       });
-      meshRef.current.instanceColor!.needsUpdate = true;
+      
+      if (meshRef.current.instanceColor) {
+        meshRef.current.instanceColor.needsUpdate = true;
+      }
+      if (meshRef.current.instanceMatrix) {
+        meshRef.current.instanceMatrix.needsUpdate = true;
+      }
     }
-  }, [particles]);
+  }, [particles, dummy]);
 
   useFrame((state, delta) => {
     if (!meshRef.current) return;
 
     // Handle Animation Logic
     let targetFactor = 0;
-    if (appState === 'FORMING' || appState === 'INPUT' || appState === 'TICKET') {
+    if (appState === 'FORMING' || appState === 'INPUT' || appState === 'TICKET' || appState === 'ITINERARY' || appState === 'REGISTER' || appState === 'GIFT_EXCHANGE') {
       targetFactor = 1;
     }
 
     // Smoothly interpolate morphFactor
-    // We use a custom lerp logic here for state transition
-    const speed = 2.5; // Energy of the formation
+    const speed = 2.5; 
     const newFactor = THREE.MathUtils.lerp(morphFactor, targetFactor, delta * speed);
     setMorphFactor(newFactor);
 
@@ -139,7 +130,6 @@ const PolygonalTree: React.FC<PolygonalTreeProps> = ({ appState, onTreeFormed })
 
       // Add floating animation
       const time = state.clock.elapsedTime;
-      // More chaotic floating when scattered, stable shimmer when tree
       const floatScale = (1 - newFactor) * 2 + 0.2; 
       currentPos.y += Math.sin(time * 2 + i) * 0.1 * floatScale;
       currentPos.x += Math.cos(time * 1.5 + i) * 0.1 * floatScale;
@@ -178,6 +168,7 @@ const PolygonalTree: React.FC<PolygonalTreeProps> = ({ appState, onTreeFormed })
   return (
     <group>
       {/* The Particles */}
+      {/* Passing undefined allows R3F to use the children geometry/material defaults properly */}
       <instancedMesh ref={meshRef} args={[undefined, undefined, PARTICLE_COUNT]}>
         <dodecahedronGeometry args={[1, 0]} />
         <meshStandardMaterial 
